@@ -94,3 +94,10 @@ export DEEPL_API_KEY=64740df2-c430-43e3-ac63-e55d3dae9784:fx
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 export PATH="$HOME/.local/bin:$PATH"
+
+# Auto-start tmux: if tmux is installed (and we're in an interactive shell not
+# already inside tmux), attach to an existing session, or start a new one if
+# there are no sessions to attach to.
+if command -v tmux >/dev/null 2>&1 && [[ -o interactive ]] && [[ -z "$TMUX" ]]; then
+    tmux attach 2>/dev/null || tmux
+fi
