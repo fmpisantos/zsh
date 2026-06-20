@@ -54,12 +54,30 @@ mkdir -p "$XDG_STATE_HOME/zsh"
 mkdir -p "$XDG_CACHE_HOME/zsh"
 mkdir -p "$XDG_CONFIG_HOME"
 
+# --- back up orphaned startup files ---------------------------------------
+# Once ZDOTDIR points at this repo, zsh reads .zprofile/.zshrc from there and
+# stops reading $HOME/.zprofile and $HOME/.zshrc. Unlike .zshenv (handled by
+# link() below), those files aren't symlinked, so nothing would otherwise move
+# them aside — they'd go silently inert. Back each up to <name>.bak so any
+# existing customizations are preserved and the supersession is visible.
+backup_orphaned() {
+    dest="$1"
+    # Skip if absent, or already a symlink we manage (re-runs leave nothing
+    # to orphan here; only a real user file matters).
+    [ -e "$dest" ] && [ ! -L "$dest" ] || return 0
+    echo "  Backing up $dest → $dest.bak"
+    mv -f "$dest" "$dest.bak"
+}
+
 # --- wire the config into place -------------------------------------------
 echo "🔗 Linking zsh configuration..."
 # $ZDOTDIR → this folder, so the rest of the startup files are read from here.
 link "$SCRIPT_DIR" "$ZSH_CONFIG_DIR"
 # zsh always reads $HOME/.zshenv first; that file sets ZDOTDIR to the dir above.
 link "$ZSH_CONFIG_DIR/.zshenv" "$HOME/.zshenv"
+# These are now read from $ZDOTDIR; preserve any that lived in $HOME.
+backup_orphaned "$HOME/.zprofile"
+backup_orphaned "$HOME/.zshrc"
 
 # --- starship -------------------------------------------------------------
 
@@ -128,6 +146,6 @@ echo ""
 echo "📝 Notes:"
 echo "  • ZDOTDIR is now $ZSH_CONFIG_DIR (a symlink to this repo)."
 echo "  • Any pre-existing ~/.zshenv, ~/.zshrc or ~/.zprofile in \$HOME are now"
-echo "    superseded — zsh reads those from \$ZDOTDIR instead. Old files were"
-echo "    left in place (the ones this script replaced are saved as *.bak)."
+echo "    superseded — zsh reads those from \$ZDOTDIR instead. Each was saved"
+echo "    as *.bak so nothing is lost."
 echo "  • Open a new shell or run: ZDOTDIR=$ZSH_CONFIG_DIR exec zsh"
