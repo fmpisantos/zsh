@@ -16,7 +16,4 @@ alias todo="nvim -c 'GotoTodos' -c 'Todo'"
 alias todos="nvim +'GotoTodos'"
 alias ic="imageCleanup"
 alias ocr="ocrf"
-alias list-agents="list-agents"
-alias close-agents="close-agents"
-alias new-agents="new-agents"
 # alias ssh='wezterm --config-file ~/.config/wezterm/.ssh_config.lua start -- ssh "$@"'

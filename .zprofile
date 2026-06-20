@@ -79,7 +79,9 @@ export PATH="$PATH:/Users/fmpi.santos/Library/Application Support/Coursier/bin"
 export XDG_CONFIG_HOME="$HOME/.config"
 
 # Java setup via Jenv
-export JAVA_HOME="$(jenv which java | sed 's:/bin/java::')"
+if which jenv > /dev/null; then
+  export JAVA_HOME="$(jenv which java | sed 's:/bin/java::')"
+fi
 
 # For compilers to find llvm you may need to set:
 export LDFLAGS="-L/opt/homebrew/opt/llvm/lib"
@@ -101,3 +103,5 @@ export PATH="$HOME/.local/bin:$PATH"
 if command -v tmux >/dev/null 2>&1 && [[ -o interactive ]] && [[ -z "$TMUX" ]]; then
     tmux attach 2>/dev/null || tmux
 fi
+export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/.local/share/bob/nvim-bin:$PATH"

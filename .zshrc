@@ -23,3 +23,6 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 source "$ZDOTDIR/aliases.zsh"
 
 source "$ZDOTDIR/theme.zsh"
+
+# Agent worktree helpers (list-agents / close-agent / new-agent) are defined
+# in functions.zsh, which is sourced via aliases.zsh.
